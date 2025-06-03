@@ -16,6 +16,11 @@
 
 </div>
 
+<div class="tabela-scroll">
+  <table>
+    <!-- conteúdo da tabela -->
+  </table>
+</div>
 <span class="menu-icon" onclick="abrirSidebar()">&#9776;</span>
 
   <style>
@@ -175,10 +180,12 @@
   }
 
   .container {
-    padding: 15px;
-    width: 100%;
-    box-sizing: border-box;
-  }
+  width: 100%;
+  max-width: 800px;
+  padding: 10px;
+  margin: auto;
+}
+
 
   table {
     font-size: 14px;
@@ -220,9 +227,12 @@ body {
   }
 
   .container {
-    padding: 10px;
-    width: 100%;
-  }
+  width: 100%;
+  max-width: 800px;
+  padding: 10px;
+  margin: auto;
+}
+
 
   table {
     font-size: 12px;
@@ -234,6 +244,21 @@ body {
   }
 
   /* Outros ajustes de layout mobile aqui */
+}
+
+.tabela-scroll {
+  overflow-x: auto;
+  width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  table {
+    font-size: 12px;
+  }
+
+  .btn, select, textarea, input {
+    width: 100%;
+  }
 }
 
 
