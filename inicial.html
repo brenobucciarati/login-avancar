@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ordens de Serviço</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background-color: #f0f2f5;
+      padding: 20px;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      color: #2c3e50;
+    }
+
+    #lista-os {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .ordem {
+      background: #fff;
+      padding: 20px;
+      border-left: 6px solid #ccc;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.2s, background 0.2s;
+      cursor: pointer;
+    }
+
+    .ordem:hover {
+      background-color: #f9fbff;
+      transform: scale(1.01);
+    }
+
+    .ordem-info {
+      flex-grow: 1;
+      margin-left: 15px;
+    }
+
+    .ordem-info strong {
+      font-size: 18px;
+      color: #34495e;
+    }
+
+    .ordem-info small {
+      display: block;
+      margin-top: 5px;
+      color: #666;
+    }
+
+    .tag-prioridade {
+      display: flex;
+      align-items: center;
+      font-weight: bold;
+      font-size: 16px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      color: white;
+    }
+
+    .alta {
+      background-color: #e74c3c;
+    }
+
+    .media {
+      background-color: #f39c12;
+    }
+
+    .baixa {
+      background-color: #27ae60;
+    }
+
+    .tag-prioridade span {
+      margin-left: 8px;
+      font-size: 18px;
+    }
+
+    #painel-concluidas {
+      position: fixed;
+      left: -400px;
+      top: 0;
+      width: 350px;
+      height: 100%;
+      background: #fff;
+      box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+      transition: left 0.3s;
+      padding: 20px;
+      z-index: 1000;
+      overflow-y: auto;
+    }
+
+    #painel-concluidas.aberto {
+      left: 0;
+    }
+
+    #fechar-painel {
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      float: right;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    #abrir-concluidas {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      font-size: 24px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      z-index: 1001;
+    }
+
+    #filtros {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .filtro-btn {
+      margin: 5px 5px;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      background-color: #ecf0f1;
+      color: #2c3e50;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+
+    .filtro-btn.ativo {
+      background-color: #3498db;
+      color: white;
+    }
+
+    .reabrir-btn {
+      margin-top: 10px;
+      background: #0099ff;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+.ordem.bloqueada {
+  position: relative;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.ordem .cadeado {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 42px;
+  color: #555;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+
+  .container {
+    padding: 15px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  table {
+    font-size: 14px;
+  }
+
+  .btn {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  select, textarea, input[type="text"] {
+    font-size: 16px; /* evita zoom automático */
+  }
+
+  .sidebar {
+    width: 80%;
+  }
+
+  .menu-icon {
+    font-size: 26px;
+    top: 15px;
+    left: 15px;
+  }
+}
+
+elect, textarea, input[type="text"] {
+  font-size: 16px;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+  </style>
+</head>
+<body>
+
+  <h1>📋 Ordens de Serviço</h1>
+  <button id="abrir-concluidas">☰</button>
+  <div id="lista-os"></div>
+
+  <div id="painel-concluidas">
+    <button id="fechar-painel">✖</button>
+    <h2>OSMs Concluídas</h2>
+
+    <div id="filtros">
+      <button class="filtro-btn ativo" data-filtro="todas">Todas</button>
+      <button class="filtro-btn" data-filtro="alta">Alta</button>
+      <button class="filtro-btn" data-filtro="media">Média</button>
+      <button class="filtro-btn" data-filtro="baixa">Baixa</button>
+    </div>
+
+    <div id="lista-concluidas"></div>
+  </div>
+<script>
+
+  const usuario = localStorage.getItem("usuarioLogado") || "";
+
+const defeitos = [
+  "MOTOR SEM FORÇA",
+  "VIBRAÇÃO EXCESSIVA",
+  "LUZ DO PAINEL ACESA",
+  "FREIO RUIM",
+  "DIREÇÃO PESADA",
+  "FUMAÇA PRETA",
+  "NÃO LIGA",
+  "SOM ESTRANHO NO MOTOR"
+];
+const origens = ["CCO", "VIS", "MAN"];
+const demandas = ["MECÂNICA", "MOTOR", "BORRACHARIA", "ELÉTRICO", "SUSPENSÃO"];
+
+const iconesPrioridade = {
+  alta: "🔴",
+  media: "🟠",
+  baixa: "🟢"
+};
+
+const prioridadePeso = {
+  alta: 1,
+  media: 2,
+  baixa: 3
+};
+
+const QTD_FIXA = 6;
+
+function gerarTodasOSMs() {
+  const todas = [];
+
+  function gerarPorPrioridade(qtd, prioridade) {
+    for (let i = 0; i < qtd; i++) {
+      const osNum = Math.floor(Math.random() * 900000 + 100000);
+      const defeito = defeitos[Math.floor(Math.random() * defeitos.length)];
+      const origem = origens[Math.floor(Math.random() * origens.length)];
+      const demanda = demandas[Math.floor(Math.random() * demandas.length)];
+      todas.push({ osNum, defeito, prioridade, origem, demanda });
+    }
+  }
+
+  gerarPorPrioridade(3, "alta");
+  gerarPorPrioridade(2, "media");
+  gerarPorPrioridade(1, "baixa");
+
+  todas.sort((a, b) => prioridadePeso[a.prioridade] - prioridadePeso[b.prioridade]);
+  localStorage.setItem("todasOSMs", JSON.stringify(todas));
+}
+
+function gerarMaisOSMs() {
+  const todas = JSON.parse(localStorage.getItem("todasOSMs")) || [];
+
+  function gerarPorPrioridade(qtd, prioridade) {
+    for (let i = 0; i < qtd; i++) {
+      const osNum = Math.floor(Math.random() * 900000 + 100000);
+      const defeito = defeitos[Math.floor(Math.random() * defeitos.length)];
+      const origem = origens[Math.floor(Math.random() * origens.length)];
+      const demanda = demandas[Math.floor(Math.random() * demandas.length)];
+      todas.push({ osNum, defeito, prioridade, origem, demanda });
+    }
+  }
+
+  gerarPorPrioridade(3, "alta");
+  gerarPorPrioridade(2, "media");
+  gerarPorPrioridade(1, "baixa");
+
+  todas.sort((a, b) => prioridadePeso[a.prioridade] - prioridadePeso[b.prioridade]);
+  localStorage.setItem("todasOSMs", JSON.stringify(todas));
+
+  const concluidas = JSON.parse(localStorage.getItem("osmsConcluidas")) || [];
+  const novas = todas.filter(os => !concluidas.includes(os.osNum)).slice(0, QTD_FIXA);
+  localStorage.setItem("osmsVisiveis", JSON.stringify(novas));
+  exibirOSMs(novas);
+}
+
+function inicializarVisiveis() {
+  const todas = JSON.parse(localStorage.getItem("todasOSMs")) || [];
+  let visiveis = JSON.parse(localStorage.getItem("osmsVisiveis"));
+  if (!visiveis || visiveis.length === 0) {
+    visiveis = todas.slice(0, QTD_FIXA);
+    localStorage.setItem("osmsVisiveis", JSON.stringify(visiveis));
+  }
+  return visiveis;
+}
+
+function exibirOSMs(listaOS) {
+  const lista = document.getElementById('lista-os');
+  lista.innerHTML = "";
+
+  const usuarioAutorizado = ["adminbreno", "cristianosales"].includes(usuario);
+  const concluidas = JSON.parse(localStorage.getItem("osmsConcluidas")) || [];
+
+  const visiveis = listaOS.filter(os => !concluidas.includes(os.osNum));
+
+  if (!usuarioAutorizado && visiveis.length === 0) {
+    gerarMaisOSMs();
+    return;
+  }
+
+  visiveis.slice(0, QTD_FIXA).forEach((osData, index) => {
+    const isBloqueada = !usuarioAutorizado && index !== 0;
+
+    const div = document.createElement("div");
+    div.className = "ordem" + (isBloqueada ? " bloqueada" : "");
+
+    if (!isBloqueada) {
+      div.onclick = () => {
+        localStorage.setItem("osSelecionada", JSON.stringify(osData));
+        window.location.href = "osm.html";
+      };
+    }
+
+    div.innerHTML = `
+      <div class="tag-prioridade ${osData.prioridade}">
+        <span>${iconesPrioridade[osData.prioridade]}</span> ${osData.prioridade.toUpperCase()}
+      </div>
+      <div class="ordem-info">
+        <strong>#${osData.osNum}</strong>
+        <small>${osData.defeito}</small>
+        <small>Origem: ${osData.origem} | Demanda: ${osData.demanda}</small>
+      </div>
+      ${isBloqueada ? '<div class="cadeado">🔒</div>' : ""}
+    `;
+
+    lista.appendChild(div);
+  });
+}
+
+function exibirConcluidas(filtro = "todas") {
+  const todas = JSON.parse(localStorage.getItem("todasOSMs")) || [];
+  const concluidas = JSON.parse(localStorage.getItem("osmsConcluidas")) || [];
+  const visiveis = JSON.parse(localStorage.getItem("osmsVisiveis")) || [];
+  const listaConcluidas = todas.filter(os => concluidas.includes(os.osNum));
+
+  const lista = document.getElementById('lista-concluidas');
+  lista.innerHTML = "";
+
+  const filtradas = filtro === "todas"
+    ? listaConcluidas
+    : listaConcluidas.filter(os => os.prioridade === filtro);
+
+  if (filtradas.length === 0) {
+    lista.innerHTML = "<p style='text-align:center;color:#888'>Nenhuma OSM nesta categoria.</p>";
+    return;
+  }
+
+  filtradas.forEach(osData => {
+    const div = document.createElement("div");
+    div.className = "ordem";
+    div.innerHTML = `
+      <div class="tag-prioridade ${osData.prioridade}">
+        <span>${iconesPrioridade[osData.prioridade]}</span> ${osData.prioridade.toUpperCase()}
+      </div>
+      <div class="ordem-info">
+        <strong>#${osData.osNum}</strong>
+        <small>${osData.defeito}</small>
+        <small>Origem: ${osData.origem} | Demanda: ${osData.demanda}</small>
+        ${["adminbreno", "cristianosales"].includes(usuario) ? '<button class="reabrir-btn">Reabrir</button>' : ""}
+      </div>
+    `;
+    lista.appendChild(div);
+
+    if (["adminbreno", "cristianosales"].includes(usuario)) {
+      const reabrirBtn = div.querySelector(".reabrir-btn");
+      reabrirBtn.onclick = () => {
+        const todasVisiveis = [...visiveis, osData]
+          .filter((v, i, self) => self.findIndex(o => o.osNum === v.osNum) === i);
+        todasVisiveis.sort((a, b) => prioridadePeso[a.prioridade] - prioridadePeso[b.prioridade]);
+        localStorage.setItem("osmsVisiveis", JSON.stringify(todasVisiveis.slice(0, QTD_FIXA)));
+
+        const novasConcluidas = concluidas.filter(num => num !== osData.osNum);
+        localStorage.setItem("osmsConcluidas", JSON.stringify(novasConcluidas));
+
+        exibirOSMs(todasVisiveis.slice(0, QTD_FIXA));
+        exibirConcluidas(filtro);
+      };
+    }
+  });
+}
+
+// Ações de painel
+document.getElementById("abrir-concluidas").onclick = () => {
+  document.getElementById("painel-concluidas").classList.add("aberto");
+  exibirConcluidas();
+};
+
+document.getElementById("fechar-painel").onclick = () => {
+  document.getElementById("painel-concluidas").classList.remove("aberto");
+};
+
+document.querySelectorAll('.filtro-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('ativo'));
+    btn.classList.add('ativo');
+    const filtro = btn.getAttribute("data-filtro");
+    exibirConcluidas(filtro);
+  });
+});
+
+// Início
+if (!localStorage.getItem("todasOSMs")) gerarTodasOSMs();
+const visiveis = inicializarVisiveis();
+exibirOSMs(visiveis);
+</script>
+</body>
+</html>

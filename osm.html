@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ordem de Serviço de Manutenção</title>
+
+ <div id="sidebar" class="sidebar">
+  <a href="#" onclick="fecharSidebar()">×</a>
+  <a href="#">PLANOS</a>
+  <a href="#">REINCIDÊNCIAS</a>
+  <a href="#" onclick="sair()">🚪 Sair</a>
+
+</div>
+</div>
+
+</div>
+
+<span class="menu-icon" onclick="abrirSidebar()">&#9776;</span>
+
+  <style>
+
+.menu-icon {
+  font-size: 30px;
+  cursor: pointer;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  color: #0084ff;
+}
+
+.sidebar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  background-color: #000000;
+  overflow-x: hidden;
+  transition: 0.4s;
+  padding-top: 60px;
+}
+
+.sidebar a {
+  padding: 10px 30px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #f4f4f4;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidebar a:hover {
+  background-color: #575757;
+}
+
+.sidebar a:first-child {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 36px;
+}
+
+
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 800px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .header, .demands, .task, .info, .actions {
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+      vertical-align: middle;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    select, textarea, input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      resize: vertical;
+    }
+    .btn {
+      padding: 10px 15px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    .tempo-timer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    .modal {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    .modal h3 {
+      margin-bottom: 20px;
+    }
+    .modal button {
+      margin: 10px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 5px;
+    }
+    .confirm-btn {
+      background-color: #28a745;
+      color: white;
+    }
+    .cancel-btn {
+      background-color: #dc3545;
+      color: white;
+    }
+    .disabled {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+
+  .container {
+    padding: 15px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  table {
+    font-size: 14px;
+  }
+
+  .btn {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  select, textarea, input[type="text"] {
+    font-size: 16px; /* evita zoom automático */
+  }
+
+  .sidebar {
+    width: 80%;
+  }
+
+  .menu-icon {
+    font-size: 26px;
+    top: 15px;
+    left: 15px;
+  }
+}
+
+elect, textarea, input[type="text"] {
+  font-size: 16px;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container" id="osm-container">
+    <h1>Ordem de Serviço de Manutenção - Início</h1>
+
+    <div class="header">
+      <table>
+        <tr>
+          <th>Número</th>
+          <th>Veículo</th>
+          <th>Data e Hora</th>
+          <th>Hodômetro</th>
+          <th>Hora Saída</th>
+          <th>Tempo</th>
+        </tr>
+        <tr>
+          <tr>
+  <td id="os-num">000000</td>
+  <td>1900</td>
+  <td>--/--/-- --:--</td>
+  <td>--</td>
+  <td>--:--</td>
+  <td><span id="timer-display">00:00:00</span></td>
+</tr>
+</div>
+
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="demands">
+      <h2>Demandas</h2>
+      <table>
+        <tr>
+          <th>Número</th>
+          <th>Origem</th>
+          <th>Problema/Atividade</th>
+        </tr>
+        <tr>
+          <td>000000</td>
+          <td>CCO</td>
+          <td>MOTOR SEM FORÇA</td>
+        </tr>
+        <tr>
+          <td colspan="3">01/01/01 00:01 - Sem força o veículo</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="task">
+  <label for="demanda">Demanda:</label>
+  <select id="demanda" style="margin-bottom: 15px;">
+    <option selected>VAZAMENTO DE ÓLEO MOTOR</option>
+  </select>
+
+  <label for="tarefa">Tarefa:</label>
+  <select id="tarefa">
+    <option selected>VAZAMENTOS</option>
+    <!-- outras opções -->
+</div>
+     
+        <option selected>VAZAMENTOS</option>
+         <option selected>VAZAMENTO SISTEMA CÂMBIO</option>
+          <option selected>VAZAMENTO DO ÓLEO HIDRÁULICO</option>
+           <option selected>VAZAMENTO NO MOTOR / LAVAR MOTOR</option>
+            <option selected>VAZAMENTO PELO CÁRTER</option>
+             <option selected>VAZAMENTO PELO RADEADOR (GERAL)</option>
+              <option selected>VAZAMENTO DE ÓLEO MOTOR</option>
+      </select>
+    </div>
+
+    <div class="info">
+      <label for="info-adicional">Informações Adicionais:</label>
+      <textarea id="info-adicional" rows="5" style="height: 120px; resize: none;"></textarea>
+      <button class="btn" onclick="gravarAudio()">🎤 Gravar Áudio</button>
+
+    </div>
+
+    <div class="actions">
+      <button class="btn" onclick="abrirModal('foto')">📷 Tirar Foto</button>
+      <button class="btn" onclick="abrirModal('enviar')">Salvar e Enviar</button>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal-overlay" class="modal-overlay">
+    <div class="modal">
+      <h3 id="modal-msg">Confirma a ação?</h3>
+      <button class="confirm-btn" onclick="confirmarModal()">Confirmar</button>
+      <button class="cancel-btn" onclick="fecharModal()">Cancelar</button>
+    </div>
+  </div>
+<div id="camera" style="margin-top: 20px; display:none;">
+  <video id="video" autoplay style="width: 100%; max-width: 400px;"></video>
+  <button class="btn" onclick="tirarFoto()">📸 Capturar</button>
+  <canvas id="canvas" style="display: none;"></canvas>
+</div>
+
+ <script>
+    // Scripts: timer, modal, lógica de envio, sidebar
+    let seconds = 0;
+    let intervalId = null;
+    let tipoModal = '';
+
+    function abrirSidebar() {
+      document.getElementById("sidebar").style.width = "250px";
+    }
+
+    function fecharSidebar() {
+      document.getElementById("sidebar").style.width = "0";
+    }
+
+    function startTimer() {
+      if (intervalId) return;
+      intervalId = setInterval(() => {
+        seconds++;
+        const hrs = String(Math.floor(seconds / 3600)).padStart(2, '0');
+        const mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+        const secs = String(seconds % 60).padStart(2, '0');
+        document.getElementById('timer-display').textContent = `${hrs}:${mins}:${secs}`;
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(intervalId);
+      intervalId = null;
+    }
+
+    function abrirModal(tipo) {
+      tipoModal = tipo;
+      const msg = tipo === 'foto'
+        ? 'Deseja tirar uma foto agora?'
+        : 'Deseja realmente enviar esta ordem de serviço?';
+      document.getElementById('modal-msg').textContent = msg;
+      document.getElementById('modal-overlay').style.display = 'flex';
+    }
+
+    function fecharModal() {
+      document.getElementById('modal-overlay').style.display = 'none';
+    }
+
+    function confirmarModal() {
+  if (tipoModal === 'enviar') {
+    const infoAdicional = document.getElementById('info-adicional').value.trim();
+    if (infoAdicional === '') {
+      alert('⚠️ É obrigatório preencher o campo "Informações Adicionais" antes de enviar.');
+      return;
+    }
+  }
+
+  fecharModal();
+
+  if (tipoModal === 'foto') {
+    alert('📸 Foto tirada!');
+  } else if (tipoModal === 'enviar') {
+    stopTimer();
+    const os = JSON.parse(localStorage.getItem("osSelecionada"));
+    if (os) {
+      removerOSMConcluida(os.osNum);  // <-- substitui a concluída por outra da fila
+      localStorage.removeItem("osSelecionada");
+    }
+    alert('✅ Ordem enviada!');
+    setTimeout(() => {
+      window.location.href = 'inicial.html';
+    }, 1000);
+  }
+
+}
+
+
+    function sair() {
+      if (intervalId) {
+        alert("Finalize a OSM antes de sair.");
+        return;
+      }
+      window.location.href = 'login.html';
+    }
+
+    // Inicia contador automaticamente
+  window.onload = function () {
+  const os = JSON.parse(localStorage.getItem("osSelecionada"));
+  if (!os) {
+    alert("Erro: Nenhuma OSM selecionada.");
+    window.location.href = "inicial.html";
+    return;
+  }
+
+  // Preencher dados da OSM
+  document.getElementById("os-num").textContent = os.osNum || "--";
+  document.querySelector(".demands table tr:nth-child(2) td:nth-child(1)").textContent = os.osNum || "--";
+  document.querySelector(".demands table tr:nth-child(2) td:nth-child(2)").textContent = os.origem || "--";
+  document.querySelector(".demands table tr:nth-child(2) td:nth-child(3)").textContent = os.defeito || "--";
+  document.querySelector(".demands table tr:nth-child(3) td").textContent = os.descricao || "Sem descrição";
+
+  // Selecionar demanda
+  const demandaSelect = document.getElementById("demanda");
+  for (let i = 0; i < demandaSelect.options.length; i++) {
+    if (demandaSelect.options[i].value === os.demanda) {
+      demandaSelect.selectedIndex = i;
+      break;
+    }
+  }
+
+  // Se quiser: preencher tarefa automaticamente (opcional)
+  const tarefaSelect = document.getElementById("tarefa");
+  for (let i = 0; i < tarefaSelect.options.length; i++) {
+    if (tarefaSelect.options[i].value.toUpperCase().includes(os.defeito.toUpperCase())) {
+      tarefaSelect.selectedIndex = i;
+      break;
+    }
+  }
+
+  startTimer();
+};
+
+function salvarEEnviar() {
+      clearInterval(intervalo);
+      os.tempo = formatarTempo(segundos); // salva tempo como string (MM:SS)
+
+      localStorage.setItem("osConcluida", JSON.stringify(os));
+      localStorage.removeItem("osSelecionada");
+
+      window.location.href = "inicial.html";
+    }
+
+    function exibirDetalhes() {
+      if (!os) {
+        document.getElementById("detalhes").innerHTML = "<p>Erro ao carregar OSM.</p>";
+        return;
+      }
+
+      const html = `
+        <p><strong>OS:</strong> #${os.osNum}</p>
+        <p><strong>Defeito:</strong> ${os.defeito}</p>
+        <p><strong>Origem:</strong> ${os.origem}</p>
+        <p><strong>Demanda:</strong> ${os.demanda}</p>
+        <p><strong>Prioridade:</strong> ${os.prioridade.toUpperCase()}</p>
+      `;
+
+      document.getElementById("detalhes").innerHTML = html;
+    }
+
+function removerOSMConcluida(osConcluidaNum) {
+  const todas = JSON.parse(localStorage.getItem("todasOSMs")) || [];
+  let visiveis = JSON.parse(localStorage.getItem("osmsVisiveis")) || [];
+
+  // Remove a concluída da lista visível
+  visiveis = visiveis.filter(os => os.osNum !== osConcluidaNum);
+
+  // Pega próximas não usadas
+  const usadosIds = visiveis.map(os => os.osNum);
+  const proximas = todas.filter(os => !usadosIds.includes(os.osNum) && os.osNum !== osConcluidaNum);
+
+  if (proximas.length > 0) {
+    visiveis.push(proximas[0]);
+  }
+
+  localStorage.setItem("osmsVisiveis", JSON.stringify(visiveis));
+}
+
+function removerOSMConcluida(osConcluidaNum) {
+  const todas = JSON.parse(localStorage.getItem("todasOSMs")) || [];
+  let visiveis = JSON.parse(localStorage.getItem("osmsVisiveis")) || [];
+
+  // Remove a concluída da lista visível
+  visiveis = visiveis.filter(os => os.osNum !== osConcluidaNum);
+
+  // Pega próximas não usadas
+  const usadosIds = visiveis.map(os => os.osNum);
+  const proximas = todas.filter(os => !usadosIds.includes(os.osNum) && os.osNum !== osConcluidaNum);
+
+  if (proximas.length > 0) {
+    visiveis.push(proximas[0]);
+  }
+
+  localStorage.setItem("osmsVisiveis", JSON.stringify(visiveis));
+}
+
+const os = JSON.parse(localStorage.getItem("osSelecionada"));
+const concluidas = JSON.parse(localStorage.getItem("osmsConcluidas")) || [];
+concluidas.push(os.osNum);
+localStorage.setItem("osmsConcluidas", JSON.stringify(concluidas));
+
+
+function gravarAudio() {
+    const infoAdicional = document.getElementById('info-adicional');
+    const botao = event.target;
+    const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+
+    recognition.lang = 'pt-BR';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    botao.textContent = '🎙️ Gravando...';
+    botao.disabled = true;
+
+    recognition.onresult = function(event) {
+      const transcricao = event.results[0][0].transcript;
+      infoAdicional.value += (infoAdicional.value ? '\n' : '') + transcricao;
+    };
+
+    recognition.onerror = function(event) {
+      alert('Erro ao gravar: ' + event.error);
+    };
+
+    recognition.onend = function() {
+      botao.textContent = '🎤 Gravar Áudio';
+      botao.disabled = false;
+    };
+
+    recognition.start();
+  }
+
+function abrirModal(tipo) {
+  tipoModal = tipo;
+
+  if (tipo === 'foto') {
+    document.getElementById('camera').style.display = 'block';
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        const video = document.getElementById('video');
+        video.srcObject = stream;
+      })
+      .catch(() => alert("Erro ao acessar a câmera."));
+  } else {
+    document.getElementById('modal-msg').textContent =
+      'Deseja realmente enviar esta ordem de serviço?';
+    document.getElementById('modal-overlay').style.display = 'flex';
+  }
+}
+
+function tirarFoto() {
+  const video = document.getElementById('video');
+  const canvas = document.getElementById('canvas');
+  const context = canvas.getContext('2d');
+
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  canvas.style.display = 'block';
+
+  const fotoDataUrl = canvas.toDataURL('image/png');
+  localStorage.setItem('fotoCapturada', fotoDataUrl);
+
+  alert("📷 Foto capturada e salva!");
+}
+
+
+  </script>
+</body>
+</html>
