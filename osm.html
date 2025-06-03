@@ -4,23 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ordem de Serviço de Manutenção</title>
-
- <div id="sidebar" class="sidebar">
-  <a href="#" onclick="fecharSidebar()">×</a>
-  <a href="#">PLANOS</a>
-  <a href="#">REINCIDÊNCIAS</a>
-  <a href="#" onclick="sair()">🚪 Sair</a>
-
-</div>
-</div>
-
-</div>
-
-<span class="menu-icon" onclick="abrirSidebar()">&#9776;</span>
-
   <style>
-
-.menu-icon {
+    .menu-icon {
   font-size: 30px;
   cursor: pointer;
   position: fixed;
@@ -234,37 +219,36 @@ body {
 }
 
 
-
-
   </style>
 </head>
 <body>
+  <!-- Ícone para abrir menu -->
+  <span class="menu-icon" onclick="abrirSidebar()">&#9776;</span>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <a href="#" onclick="fecharSidebar()">×</a>
+    <a href="#">PLANOS</a>
+    <a href="#">REINCIDÊNCIAS</a>
+    <a href="#" onclick="sair()">🚪 Sair</a>
+  </div>
+
   <div class="container" id="osm-container">
     <h1>Ordem de Serviço de Manutenção - Início</h1>
 
     <div class="header">
       <table>
         <tr>
-          <th>Número</th>
-          <th>Veículo</th>
-          <th>Data e Hora</th>
-          <th>Hodômetro</th>
-          <th>Hora Saída</th>
-          <th>Tempo</th>
+          <th>Número</th><th>Veículo</th><th>Data e Hora</th>
+          <th>Hodômetro</th><th>Hora Saída</th><th>Tempo</th>
         </tr>
         <tr>
-          <tr>
-  <td id="os-num">000000</td>
-  <td>1900</td>
-  <td>--/--/-- --:--</td>
-  <td>--</td>
-  <td>--:--</td>
-  <td><span id="timer-display">00:00:00</span></td>
-</tr>
-</div>
-
-            </div>
-          </td>
+          <td id="os-num">000000</td>
+          <td>1900</td>
+          <td id="data-hora-random">--/--/-- --:--</td>
+          <td>--</td>
+          <td>--:--</td>
+          <td><span id="timer-display">00:00:00</span></td>
         </tr>
       </table>
     </div>
@@ -272,11 +256,7 @@ body {
     <div class="demands">
       <h2>Demandas</h2>
       <table>
-        <tr>
-          <th>Número</th>
-          <th>Origem</th>
-          <th>Problema/Atividade</th>
-        </tr>
+        <tr><th>Número</th><th>Origem</th><th>Problema/Atividade</th></tr>
         <tr>
           <td>000000</td>
           <td>CCO</td>
@@ -289,32 +269,27 @@ body {
     </div>
 
     <div class="task">
-  <label for="demanda">Demanda:</label>
-  <select id="demanda" style="margin-bottom: 15px;">
-    <option selected>VAZAMENTO DE ÓLEO MOTOR</option>
-  </select>
+      <label for="demanda">Demanda:</label>
+      <select id="demanda" style="margin-bottom: 15px;">
+        <option selected>VAZAMENTO DE ÓLEO MOTOR</option>
+      </select>
 
-  <label for="tarefa">Tarefa:</label>
-  <select id="tarefa">
-    <option selected>VAZAMENTOS</option>
-    <!-- outras opções -->
-</div>
-     
-        <option selected>VAZAMENTOS</option>
-         <option selected>VAZAMENTO SISTEMA CÂMBIO</option>
-          <option selected>VAZAMENTO DO ÓLEO HIDRÁULICO</option>
-           <option selected>VAZAMENTO NO MOTOR / LAVAR MOTOR</option>
-            <option selected>VAZAMENTO PELO CÁRTER</option>
-             <option selected>VAZAMENTO PELO RADEADOR (GERAL)</option>
-              <option selected>VAZAMENTO DE ÓLEO MOTOR</option>
+      <label for="tarefa">Tarefa:</label>
+      <select id="tarefa">
+        <option>VAZAMENTOS</option>
+        <option>VAZAMENTO SISTEMA CÂMBIO</option>
+        <option>VAZAMENTO DO ÓLEO HIDRÁULICO</option>
+        <option>VAZAMENTO NO MOTOR / LAVAR MOTOR</option>
+        <option>VAZAMENTO PELO CÁRTER</option>
+        <option>VAZAMENTO PELO RADEADOR (GERAL)</option>
+        <option selected>VAZAMENTO DE ÓLEO MOTOR</option>
       </select>
     </div>
 
     <div class="info">
       <label for="info-adicional">Informações Adicionais:</label>
-      <textarea id="info-adicional" rows="5" style="height: 120px; resize: none;"></textarea>
+      <textarea id="info-adicional" rows="5" style="height: 110px; resize: none;"></textarea>
       <button class="btn" onclick="gravarAudio()">🎤 Gravar Áudio</button>
-
     </div>
 
     <div class="actions">
@@ -323,7 +298,6 @@ body {
     </div>
   </div>
 
-  <!-- Modal -->
   <div id="modal-overlay" class="modal-overlay">
     <div class="modal">
       <h3 id="modal-msg">Confirma a ação?</h3>
@@ -331,14 +305,15 @@ body {
       <button class="cancel-btn" onclick="fecharModal()">Cancelar</button>
     </div>
   </div>
-<div id="camera" style="margin-top: 20px; display:none;">
-  <video id="video" autoplay style="width: 100%; max-width: 400px;"></video>
-  <button class="btn" onclick="tirarFoto()">📸 Capturar</button>
-  <canvas id="canvas" style="display: none;"></canvas>
-</div>
 
- <script>
-    // Scripts: timer, modal, lógica de envio, sidebar
+  <div id="camera" style="margin-top: 20px; display:none;">
+    <video id="video" autoplay style="width: 100%; max-width: 400px;"></video>
+    <button class="btn" onclick="tirarFoto()">📸 Capturar</button>
+    <canvas id="canvas" style="display: none;"></canvas>
+  </div>
+
+  <script>
+   // Scripts: timer, modal, lógica de envio, sidebar
     let seconds = 0;
     let intervalId = null;
     let tipoModal = '';
@@ -451,7 +426,38 @@ body {
     }
   }
 
+const horaSaida = new Date();
+const horaSaidaFormatada = horaSaida.toLocaleTimeString('pt-BR', {
+  hour: '2-digit',
+  minute: '2-digit'
+});
+
+// Preencher o campo da hora de saída na tabela
+document.querySelector(".header table tr:nth-child(2) td:nth-child(5)").textContent = horaSaidaFormatada;
+
   startTimer();
+
+function gerarDataHoraAleatoria() {
+  const agora = new Date();
+  const diasAtras = Math.floor(Math.random() * 7);
+  const horas = Math.floor(Math.random() * 24);
+  const minutos = Math.floor(Math.random() * 60);
+
+  const dataAleatoria = new Date(agora.getTime() - (diasAtras * 24 * 60 * 60 * 1000));
+  dataAleatoria.setHours(horas);
+  dataAleatoria.setMinutes(minutos);
+
+  const dia = String(dataAleatoria.getDate()).padStart(2, '0');
+  const mes = String(dataAleatoria.getMonth() + 1).padStart(2, '0');
+  const ano = String(dataAleatoria.getFullYear()).slice(-2);
+  const hora = String(dataAleatoria.getHours()).padStart(2, '0');
+  const min = String(dataAleatoria.getMinutes()).padStart(2, '0');
+
+  return `${dia}/${mes}/${ano} ${hora}:${min}`;
+}
+
+document.getElementById("data-hora-random").textContent = gerarDataHoraAleatoria();
+
 };
 
 function salvarEEnviar() {
@@ -585,8 +591,31 @@ function tirarFoto() {
   const fotoDataUrl = canvas.toDataURL('image/png');
   localStorage.setItem('fotoCapturada', fotoDataUrl);
 
+  // Mostrar preview da foto capturada
+  const imgPreview = document.getElementById('img-capturada');
+  if (imgPreview) {
+    imgPreview.src = fotoDataUrl;
+    document.getElementById('foto-preview').style.display = 'block';
+  }
+
   alert("📷 Foto capturada e salva!");
+
+  // Para a câmera após capturar a foto
+  fecharCamera();
 }
+
+function fecharCamera() {
+  const video = document.getElementById('video');
+  const stream = video.srcObject;
+
+  if (stream) {
+    stream.getTracks().forEach(track => track.stop());
+  }
+  video.srcObject = null;
+
+  document.getElementById('camera').style.display = 'none';
+}
+
 
 
   </script>
