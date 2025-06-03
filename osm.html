@@ -591,31 +591,8 @@ function tirarFoto() {
   const fotoDataUrl = canvas.toDataURL('image/png');
   localStorage.setItem('fotoCapturada', fotoDataUrl);
 
-  // Mostrar preview da foto capturada
-  const imgPreview = document.getElementById('img-capturada');
-  if (imgPreview) {
-    imgPreview.src = fotoDataUrl;
-    document.getElementById('foto-preview').style.display = 'block';
-  }
-
   alert("📷 Foto capturada e salva!");
-
-  // Para a câmera após capturar a foto
-  fecharCamera();
 }
-
-function fecharCamera() {
-  const video = document.getElementById('video');
-  const stream = video.srcObject;
-
-  if (stream) {
-    stream.getTracks().forEach(track => track.stop());
-  }
-  video.srcObject = null;
-
-  document.getElementById('camera').style.display = 'none';
-}
-
 
 
   </script>
