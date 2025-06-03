@@ -76,12 +76,9 @@
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-     width: 100%;
-     max-width: 800px;
-     box-sizing: border-box;
-     padding: 15px;
-     margin: auto;
-}
+      max-width: 800px;
+      margin: auto;
+    }
     h1 {
       text-align: center;
       font-size: 24px;
@@ -190,7 +187,7 @@
   }
 
   select, textarea, input[type="text"] {
-    font-size: 16px; 
+    font-size: 16px; /* evita zoom automático */
   }
 
   .sidebar {
@@ -209,7 +206,7 @@ elect, textarea, input[type="text"] {
 }
 
 body {
-  overflow-x: auto;
+  overflow-x: hidden;
 }
 
 /* Para telas pequenas (celulares) */
