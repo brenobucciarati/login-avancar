@@ -209,14 +209,19 @@ elect, textarea, input[type="text"] {
 }
 
 body {
-  overflow-x: hidden;
+  overflow-x: auto;
 }
 
 /* Para telas pequenas (celulares) */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 100%) {
+  body {
+    font-size: 14px;
+    padding: 10px;
+  }
+
   .container {
     padding: 10px;
-    font-size: 14px;
+    width: 100%;
   }
 
   table {
@@ -228,12 +233,8 @@ body {
     margin-bottom: 10px;
   }
 
-  .sidebar {
-    width: 100%; /* se abrir no celular */
-  }
+  /* Outros ajustes de layout mobile aqui */
 }
-
-
 
 
   </style>
