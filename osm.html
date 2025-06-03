@@ -4,8 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ordem de Serviço de Manutenção</title>
+
+ <div id="sidebar" class="sidebar">
+  <a href="#" onclick="fecharSidebar()">×</a>
+  <a href="#">PLANOS</a>
+  <a href="#">REINCIDÊNCIAS</a>
+  <a href="#" onclick="sair()">🚪 Sair</a>
+
+</div>
+</div>
+
+</div>
+
+<span class="menu-icon" onclick="abrirSidebar()">&#9776;</span>
+
   <style>
-    .menu-icon {
+
+.menu-icon {
   font-size: 30px;
   cursor: pointer;
   position: fixed;
@@ -219,36 +234,37 @@ body {
 }
 
 
+
+
   </style>
 </head>
 <body>
-  <!-- Ícone para abrir menu -->
-  <span class="menu-icon" onclick="abrirSidebar()">&#9776;</span>
-
-  <!-- Sidebar -->
-  <div id="sidebar" class="sidebar">
-    <a href="#" onclick="fecharSidebar()">×</a>
-    <a href="#">PLANOS</a>
-    <a href="#">REINCIDÊNCIAS</a>
-    <a href="#" onclick="sair()">🚪 Sair</a>
-  </div>
-
   <div class="container" id="osm-container">
     <h1>Ordem de Serviço de Manutenção - Início</h1>
 
     <div class="header">
       <table>
         <tr>
-          <th>Número</th><th>Veículo</th><th>Data e Hora</th>
-          <th>Hodômetro</th><th>Hora Saída</th><th>Tempo</th>
+          <th>Número</th>
+          <th>Veículo</th>
+          <th>Data e Hora</th>
+          <th>Hodômetro</th>
+          <th>Hora Saída</th>
+          <th>Tempo</th>
         </tr>
         <tr>
-          <td id="os-num">000000</td>
-          <td>1900</td>
-          <td>--/--/-- --:--</td>
-          <td>--</td>
-          <td>--:--</td>
-          <td><span id="timer-display">00:00:00</span></td>
+          <tr>
+  <td id="os-num">000000</td>
+  <td>1900</td>
+  <td>--/--/-- --:--</td>
+  <td>--</td>
+  <td>--:--</td>
+  <td><span id="timer-display">00:00:00</span></td>
+</tr>
+</div>
+
+            </div>
+          </td>
         </tr>
       </table>
     </div>
@@ -256,7 +272,11 @@ body {
     <div class="demands">
       <h2>Demandas</h2>
       <table>
-        <tr><th>Número</th><th>Origem</th><th>Problema/Atividade</th></tr>
+        <tr>
+          <th>Número</th>
+          <th>Origem</th>
+          <th>Problema/Atividade</th>
+        </tr>
         <tr>
           <td>000000</td>
           <td>CCO</td>
@@ -269,27 +289,32 @@ body {
     </div>
 
     <div class="task">
-      <label for="demanda">Demanda:</label>
-      <select id="demanda" style="margin-bottom: 15px;">
-        <option selected>VAZAMENTO DE ÓLEO MOTOR</option>
-      </select>
+  <label for="demanda">Demanda:</label>
+  <select id="demanda" style="margin-bottom: 15px;">
+    <option selected>VAZAMENTO DE ÓLEO MOTOR</option>
+  </select>
 
-      <label for="tarefa">Tarefa:</label>
-      <select id="tarefa">
-        <option>VAZAMENTOS</option>
-        <option>VAZAMENTO SISTEMA CÂMBIO</option>
-        <option>VAZAMENTO DO ÓLEO HIDRÁULICO</option>
-        <option>VAZAMENTO NO MOTOR / LAVAR MOTOR</option>
-        <option>VAZAMENTO PELO CÁRTER</option>
-        <option>VAZAMENTO PELO RADEADOR (GERAL)</option>
-        <option selected>VAZAMENTO DE ÓLEO MOTOR</option>
+  <label for="tarefa">Tarefa:</label>
+  <select id="tarefa">
+    <option selected>VAZAMENTOS</option>
+    <!-- outras opções -->
+</div>
+     
+        <option selected>VAZAMENTOS</option>
+         <option selected>VAZAMENTO SISTEMA CÂMBIO</option>
+          <option selected>VAZAMENTO DO ÓLEO HIDRÁULICO</option>
+           <option selected>VAZAMENTO NO MOTOR / LAVAR MOTOR</option>
+            <option selected>VAZAMENTO PELO CÁRTER</option>
+             <option selected>VAZAMENTO PELO RADEADOR (GERAL)</option>
+              <option selected>VAZAMENTO DE ÓLEO MOTOR</option>
       </select>
     </div>
 
     <div class="info">
       <label for="info-adicional">Informações Adicionais:</label>
-      <textarea id="info-adicional" rows="5" style="height: 110px; resize: none;"></textarea>
+      <textarea id="info-adicional" rows="5" style="height: 120px; resize: none;"></textarea>
       <button class="btn" onclick="gravarAudio()">🎤 Gravar Áudio</button>
+
     </div>
 
     <div class="actions">
@@ -298,6 +323,7 @@ body {
     </div>
   </div>
 
+  <!-- Modal -->
   <div id="modal-overlay" class="modal-overlay">
     <div class="modal">
       <h3 id="modal-msg">Confirma a ação?</h3>
@@ -305,15 +331,14 @@ body {
       <button class="cancel-btn" onclick="fecharModal()">Cancelar</button>
     </div>
   </div>
+<div id="camera" style="margin-top: 20px; display:none;">
+  <video id="video" autoplay style="width: 100%; max-width: 400px;"></video>
+  <button class="btn" onclick="tirarFoto()">📸 Capturar</button>
+  <canvas id="canvas" style="display: none;"></canvas>
+</div>
 
-  <div id="camera" style="margin-top: 20px; display:none;">
-    <video id="video" autoplay style="width: 100%; max-width: 400px;"></video>
-    <button class="btn" onclick="tirarFoto()">📸 Capturar</button>
-    <canvas id="canvas" style="display: none;"></canvas>
-  </div>
-
-  <script>
-   // Scripts: timer, modal, lógica de envio, sidebar
+ <script>
+    // Scripts: timer, modal, lógica de envio, sidebar
     let seconds = 0;
     let intervalId = null;
     let tipoModal = '';
