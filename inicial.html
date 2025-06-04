@@ -222,6 +222,26 @@ body {
   overflow-x: hidden;
 }
 
+#botao-sair {
+  margin-top: 30px;
+  background-color: #ff7300;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  display: block;
+  width: 100%;
+  font-size: 16px;
+  transition: background 0.2s;
+}
+
+#botao-sair:hover {
+  background-color: #ff7300;
+}
+
+
   </style>
 </head>
 <body>
@@ -239,6 +259,8 @@ body {
       <button class="filtro-btn" data-filtro="alta">Alta</button>
       <button class="filtro-btn" data-filtro="media">Média</button>
       <button class="filtro-btn" data-filtro="baixa">Baixa</button>
+      <button id="botao-sair">🚪 Sair</button>
+
     </div>
 
     <div id="lista-concluidas"></div>
@@ -454,6 +476,13 @@ document.querySelectorAll('.filtro-btn').forEach(btn => {
 if (!localStorage.getItem("todasOSMs")) gerarTodasOSMs();
 const visiveis = inicializarVisiveis();
 exibirOSMs(visiveis);
+
+document.getElementById("botao-sair").onclick = () => {
+  localStorage.removeItem("usuarioLogado"); // limpa o login
+  window.location.href = "login.html"; // redireciona para a tela de login
+};
+
+
 </script>
 </body>
 </html>
