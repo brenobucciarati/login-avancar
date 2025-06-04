@@ -345,8 +345,13 @@ function exibirOSMs(listaOS) {
     return;
   }
 
-  visiveis.slice(0, QTD_FIXA).forEach((osData, index) => {
-    const isBloqueada = !usuarioAutorizado && index !== 0;
+   // Identificar a menor prioridade presente nas visíveis
+  const prioridadesDisponiveis = visiveis.map(os => prioridadePeso[os.prioridade]);
+  const menorPrioridade = Math.min(...prioridadesDisponiveis);
+
+  visiveis.slice(0, QTD_FIXA).forEach((osData) => {
+    const isBloqueada = !usuarioAutorizado && prioridadePeso[osData.prioridade] !== menorPrioridade;
+
 
     const div = document.createElement("div");
     div.className = "ordem" + (isBloqueada ? " bloqueada" : "");
