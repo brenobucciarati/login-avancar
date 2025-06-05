@@ -237,6 +237,8 @@ body {
     <a href="#" onclick="fecharSidebar()">×</a>
     <a href="#">PLANOS</a>
     <a href="#">REINCIDÊNCIAS</a>
+    <a href="#">COMPONENTES</a>
+    <a href="#">@ ANEXOS</a>
     <a href="#" onclick="sair()">🚪 Sair</a>
   </div>
 
@@ -402,6 +404,9 @@ body {
     // Inicia contador automaticamente
   window.onload = function () {
   const os = JSON.parse(localStorage.getItem("osSelecionada"));
+  
+
+  
   if (!os) {
     alert("Erro: Nenhuma OSM selecionada.");
     window.location.href = "inicial.html";
