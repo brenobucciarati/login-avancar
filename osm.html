@@ -248,12 +248,12 @@ body {
     <div class="header">
       <table>
         <tr>
-          <th>Veículo</th><th>Número</th><th>Data e Hora</th>
+          <th>Número</th><th>Veículo</th><th>Data e Hora</th>
           <th>Hodômetro</th><th>Hora Saída</th><th>Tempo</th>
         </tr>
         <tr>
           <td id="os-num">000000</td>
-          <td>000000</td>
+          <td>1900</td>
           <td id="data-hora-random">--/--/-- --:--</td>
           <td>--</td>
           <td>--:--</td>
@@ -535,28 +535,10 @@ function removerOSMConcluida(osConcluidaNum) {
   localStorage.setItem("osmsVisiveis", JSON.stringify(visiveis));
 }
 
-if (tipoModal === 'enviar') {
-  stopTimer();
-
-  const os = JSON.parse(localStorage.getItem("osSelecionada"));
-  if (os) {
-    // Marca a OSM como concluída aqui
-    let concluidas = JSON.parse(localStorage.getItem("osmsConcluidas")) || [];
-    if (!concluidas.includes(os.osNum)) {
-      concluidas.push(os.osNum);
-      localStorage.setItem("osmsConcluidas", JSON.stringify(concluidas));
-    }
-
-    removerOSMConcluida(os.osNum);
-    localStorage.removeItem("osSelecionada");
-  }
-
-  alert('✅ Ordem enviada!');
-  setTimeout(() => {
-    window.location.href = 'inicial.html';
-  }, 1000);
-}
-
+const os = JSON.parse(localStorage.getItem("osSelecionada"));
+const concluidas = JSON.parse(localStorage.getItem("osmsConcluidas")) || [];
+concluidas.push(os.osNum);
+localStorage.setItem("osmsConcluidas", JSON.stringify(concluidas));
 
 
 function gravarAudio() {
@@ -624,43 +606,7 @@ function tirarFoto() {
   alert("📷 Foto capturada e salva!");
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const defeito = localStorage.getItem('defeitoSelecionado');
 
-  if (defeito) {
-    const demandaInput = document.getElementById('demanda');
-    if (demandaInput) {
-      switch (defeito.toUpperCase()) {
-        case 'MECÂNICA':
-          demandaInput.value = 'MECÂNICA';
-          break;
-        case 'MOTOR':
-          demandaInput.value = 'MOTOR';
-          break;
-        case 'BORRACHARIA':
-          demandaInput.value = 'BORRACHARIA';
-          break;
-        case 'ELÉTRICO':
-          demandaInput.value = 'ELÉTRICO';
-          break;
-        case 'SUSPENSÃO':
-          demandaInput.value = 'SUSPENSÃO';
-          break;
-        default:
-          demandaInput.value = defeito; // coloca o texto direto caso não seja um dos acima
-      }
-    }
-
-    // Preenche tarefas 1 a 7 com T1 a T7
-    for (let i = 1; i <= 7; i++) {
-      const tarefaInput = document.getElementById(`tarefa${i}`);
-      if (tarefaInput) {
-        tarefaInput.value = `T${i}`;
-      }
-    }
-  }
-});
-</script>
-
+  </script>
 </body>
 </html>
