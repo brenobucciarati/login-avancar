@@ -248,6 +248,7 @@ body {
 
   <h1>📋 Ordens de Serviço</h1>
   <button id="abrir-concluidas">☰</button>
+  <div id="contador-os" style="max-width:700px; margin: 0 auto 20px auto; font-weight: bold; font-size: 16px; color: #555;"></div>
   <div id="lista-os"></div>
 
   <div id="painel-concluidas">
@@ -280,7 +281,7 @@ const defeitos = [
   "SOM ESTRANHO NO MOTOR"
 ];
 const origens = ["CCO", "VIS", "MAN"];
-const demandas = ["MECÂNICA", "MOTOR", "BORRACHARIA", "ELÉTRICO", "SUSPENSÃO"];
+const demandas = ["MECÂNICA", "MOTOR", "ELÉTRICO"];
 
 const iconesPrioridade = {
   alta: "🔴",
@@ -301,7 +302,7 @@ function gerarTodasOSMs() {
 
   function gerarPorPrioridade(qtd, prioridade) {
     for (let i = 0; i < qtd; i++) {
-      const osNum = Math.floor(Math.random() * 900000 + 100000);
+      const osNum = Math.floor(Math.random() * (1759 - 1442 + 1)) + 1442;
       const defeito = defeitos[Math.floor(Math.random() * defeitos.length)];
       const origem = origens[Math.floor(Math.random() * origens.length)];
       const demanda = demandas[Math.floor(Math.random() * demandas.length)];
@@ -322,7 +323,7 @@ function gerarMaisOSMs() {
 
   function gerarPorPrioridade(qtd, prioridade) {
     for (let i = 0; i < qtd; i++) {
-      const osNum = Math.floor(Math.random() * 900000 + 100000);
+      const osNum = Math.floor(Math.random() * (1759 - 1442 + 1)) + 1442;
       const defeito = defeitos[Math.floor(Math.random() * defeitos.length)];
       const origem = origens[Math.floor(Math.random() * origens.length)];
       const demanda = demandas[Math.floor(Math.random() * demandas.length)];
@@ -352,7 +353,7 @@ function inicializarVisiveis() {
   }
   return visiveis;
 }
-
+//exibe a lista das osm
 function exibirOSMs(listaOS) {
   const lista = document.getElementById('lista-os');
   lista.innerHTML = "";
@@ -367,13 +368,12 @@ function exibirOSMs(listaOS) {
     return;
   }
 
-   // Identificar a menor prioridade presente nas visíveis
+  // indentifica a menor prioridade 
   const prioridadesDisponiveis = visiveis.map(os => prioridadePeso[os.prioridade]);
   const menorPrioridade = Math.min(...prioridadesDisponiveis);
 
   visiveis.slice(0, QTD_FIXA).forEach((osData) => {
     const isBloqueada = !usuarioAutorizado && prioridadePeso[osData.prioridade] !== menorPrioridade;
-
 
     const div = document.createElement("div");
     div.className = "ordem" + (isBloqueada ? " bloqueada" : "");
@@ -399,6 +399,15 @@ function exibirOSMs(listaOS) {
 
     lista.appendChild(div);
   });
+
+  atualizarContador(); // sempre que a lista mudar chama o contador
+}
+
+// serve para atualizar o contador
+function atualizarContador() {
+  const concluidas = JSON.parse(localStorage.getItem("osmsConcluidas")) || [];
+  const total = 6; // número fixo de osms
+  document.getElementById("contador-os").textContent = `${concluidas.length} de ${total}`;
 }
 
 function exibirConcluidas(filtro = "todas") {
@@ -453,14 +462,17 @@ function exibirConcluidas(filtro = "todas") {
   });
 }
 
-// Ações de painel
+// ações disponiveis no painel 
 document.getElementById("abrir-concluidas").onclick = () => {
   document.getElementById("painel-concluidas").classList.add("aberto");
   exibirConcluidas();
+  atualizarContador();  // ao abrir atualiza o contador 
 };
+
 
 document.getElementById("fechar-painel").onclick = () => {
   document.getElementById("painel-concluidas").classList.remove("aberto");
+atualizarContador();  // ao fechar atualizar o contador
 };
 
 document.querySelectorAll('.filtro-btn').forEach(btn => {
@@ -478,8 +490,8 @@ const visiveis = inicializarVisiveis();
 exibirOSMs(visiveis);
 
 document.getElementById("botao-sair").onclick = () => {
-  localStorage.removeItem("usuarioLogado"); // limpa o login
-  window.location.href = "login.html"; // redireciona para a tela de login
+  localStorage.removeItem("usuarioLogado"); // limpa o login ao atualizar 
+  window.location.href = "login.html"; // retoma para tela de
 };
 
 
