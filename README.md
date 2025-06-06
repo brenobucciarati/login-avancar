@@ -33,7 +33,7 @@ Registrar e acompanhar a execução de uma Ordem de Serviço.
 
 ---
 
-## 🔁 2. `reincidencias.html` - Registro de Reincidências
+##  2. `reincidencias.html` - Registro de Reincidências
 
 ### Objetivo:
 Registrar se houve reincidência de problemas após a execução da OSM.
@@ -52,7 +52,7 @@ Registrar se houve reincidência de problemas após a execução da OSM.
 
 ---
 
-## ⚙️ 3. `componentes.html` - Componentes Substituídos
+##  3. `componentes.html` - Componentes Substituídos
 
 ### Objetivo:
 Registrar os componentes que foram trocados ou substituídos durante a OSM.
@@ -69,7 +69,7 @@ Registrar os componentes que foram trocados ou substituídos durante a OSM.
 
 ---
 
-## 📁 Estrutura de Armazenamento
+##  Estrutura de Armazenamento
 
 - `osSelecionada`: Objeto com dados da OSM em execução.
 - `osmsConcluidas`: Lista de OSMs finalizadas.
@@ -77,7 +77,7 @@ Registrar os componentes que foram trocados ou substituídos durante a OSM.
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+##  Tecnologias Utilizadas
 
 - **HTML5**
 - **CSS3**
@@ -86,7 +86,7 @@ Registrar os componentes que foram trocados ou substituídos durante a OSM.
 
 ---
 
-## 📌 Possíveis Melhorias Futuras
+##  Possíveis Melhorias Futuras
 
 - Backend para persistência definitiva dos dados.
 - Login/autenticação.
@@ -98,4 +98,7 @@ Registrar os componentes que foram trocados ou substituídos durante a OSM.
 ## 📧 Contato
 
 Para dúvidas ou sugestões, entre em contato com o desenvolvedor do sistema.
+E-mail: breno.vinicius@itamaraca.com.br
+Número: 81 993876548
+
 
