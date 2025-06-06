@@ -302,7 +302,7 @@ const prioridadePeso = {
   baixa: 3
 };
 
-const QTD_FIXA = 6;
+const QTD_FIXA = 9;
 
 function gerarTodasOSMs() {
   const todas = [];
@@ -318,8 +318,8 @@ function gerarTodasOSMs() {
   }
 
   gerarPorPrioridade(3, "alta");
-  gerarPorPrioridade(2, "media");
-  gerarPorPrioridade(1, "baixa");
+  gerarPorPrioridade(3, "media");
+  gerarPorPrioridade(3, "baixa");
 
   todas.sort((a, b) => prioridadePeso[a.prioridade] - prioridadePeso[b.prioridade]);
   localStorage.setItem("todasOSMs", JSON.stringify(todas));
@@ -339,8 +339,8 @@ function gerarMaisOSMs() {
   }
 
   gerarPorPrioridade(3, "alta");
-  gerarPorPrioridade(2, "media");
-  gerarPorPrioridade(1, "baixa");
+  gerarPorPrioridade(3, "media");
+  gerarPorPrioridade(3, "baixa");
 
   todas.sort((a, b) => prioridadePeso[a.prioridade] - prioridadePeso[b.prioridade]);
   localStorage.setItem("todasOSMs", JSON.stringify(todas));
