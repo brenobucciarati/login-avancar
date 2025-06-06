@@ -248,6 +248,14 @@ body {
 
   <h1>📋 Ordens de Serviço</h1>
   <button id="abrir-concluidas">☰</button>
+  <p id="contador-osms" style="
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+  margin: 10px auto 20px auto;
+  max-width: 700px;
+  color: #2c3e50;
+"></p>
   <div id="lista-os"></div>
 
   <div id="painel-concluidas">
@@ -301,7 +309,7 @@ function gerarTodasOSMs() {
 
   function gerarPorPrioridade(qtd, prioridade) {
     for (let i = 0; i < qtd; i++) {
-      const osNum = Math.floor(Math.random() * 900000 + 100000);
+     const osNum = Math.floor(Math.random() * (1759 - 1442 + 1)) + 1442;
       const defeito = defeitos[Math.floor(Math.random() * defeitos.length)];
       const origem = origens[Math.floor(Math.random() * origens.length)];
       const demanda = demandas[Math.floor(Math.random() * demandas.length)];
@@ -322,7 +330,7 @@ function gerarMaisOSMs() {
 
   function gerarPorPrioridade(qtd, prioridade) {
     for (let i = 0; i < qtd; i++) {
-      const osNum = Math.floor(Math.random() * 900000 + 100000);
+      const osNum = Math.floor(Math.random() * (1759 - 1442 + 1)) + 1442;
       const defeito = defeitos[Math.floor(Math.random() * defeitos.length)];
       const origem = origens[Math.floor(Math.random() * origens.length)];
       const demanda = demandas[Math.floor(Math.random() * demandas.length)];
@@ -359,6 +367,7 @@ function exibirOSMs(listaOS) {
 
   const usuarioAutorizado = ["adminbreno", "cristianosales"].includes(usuario);
   const concluidas = JSON.parse(localStorage.getItem("osmsConcluidas")) || [];
+  atualizarContadorOSMs();
 
   const visiveis = listaOS.filter(os => !concluidas.includes(os.osNum));
 
@@ -448,6 +457,7 @@ function exibirConcluidas(filtro = "todas") {
 
         exibirOSMs(todasVisiveis.slice(0, QTD_FIXA));
         exibirConcluidas(filtro);
+        atualizarContadorOSMs();
       };
     }
   });
@@ -482,6 +492,17 @@ document.getElementById("botao-sair").onclick = () => {
   window.location.href = "login.html"; // redireciona para a tela de login
 };
 
+function atualizarContadorOSMs() {
+  const todasVisiveis = JSON.parse(localStorage.getItem("osmsVisiveis")) || [];
+  const concluidas = JSON.parse(localStorage.getItem("osmsConcluidas")) || [];
+  const restantes = todasVisiveis.filter(os => !concluidas.includes(os.osNum));
+
+  const feitas = QTD_FIXA - restantes.length;
+  const total = QTD_FIXA;
+
+  const contador = document.getElementById("contador-osms");
+  contador.textContent = `${feitas} de ${total} concluídas`;
+}
 
 </script>
 </body>
